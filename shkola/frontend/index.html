@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Школьная библиотека - Первомайская СОШ</title>
+    <link rel="stylesheet" href="/static/style.css?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="page active" id="loginPage">
+        <div class="login-container">
+            <div class="grid-bg"></div>
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-logo">
+                        <svg width="56" height="56" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="10" fill="#6366F1"/>
+                            <path d="M20 8L32 14V26L20 32L8 26V14L20 8Z" fill="white" fill-opacity="0.9"/>
+                            <path d="M20 12L28 16V24L20 28L12 24V16L20 12Z" fill="#6366F1"/>
+                        </svg>
+                    </div>
+                    <h1>Школьная библиотека</h1>
+                    <p class="login-subtitle">Первомайская СОШ</p>
+                </div>
+                <div class="login-tabs">
+                    <button class="login-tab active" onclick="switchLoginTab('student', this)">Ученик</button>
+                    <button class="login-tab" onclick="switchLoginTab('librarian', this)">Библиотекарь</button>
+                </div>
+
+                <!-- Student Tab -->
+                <div class="login-tab-content active" id="studentLogin">
+                    <form onsubmit="studentLogin(event)">
+                        <div class="form-group">
+                            <label>Ваше ФИО</label>
+                            <input type="text" id="studentNameInput" placeholder="Иванов Иван Иванович" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="password" id="studentPassword" placeholder="Введите пароль" required>
+                        </div>
+                        <div style="display:flex;gap:8px;margin-bottom:20px;">
+                            <button type="submit" class="btn btn-primary" style="flex:1;">Войти</button>
+                            <button type="button" class="btn btn-secondary" onclick="showStudentRegister()" style="flex:1;">Регистрация</button>
+                        </div>
+                    </form>
+                    <!-- Registration form (hidden) -->
+                    <form id="studentRegisterForm" onsubmit="studentRegister(event)" style="display:none;border-top:1px solid rgba(255,255,255,.1);padding-top:20px;">
+                        <p style="color:rgba(255,255,255,.7);font-size:14px;margin-bottom:16px;text-align:center;">Регистрация нового ученика</p>
+                        <div class="form-group">
+                            <label>ФИО</label>
+                            <input type="text" id="regName" placeholder="Иванов Иван Иванович" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Класс</label>
+                            <select id="regGrade" required>
+                                <option value="">Выберите класс</option>
+                                <option value="5">5 класс</option>
+                                <option value="6">6 класс</option>
+                                <option value="7">7 класс</option>
+                                <option value="8">8 класс</option>
+                                <option value="9">9 класс</option>
+                                <option value="10">10 класс</option>
+                                <option value="11">11 класс</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="password" id="regPassword" placeholder="Придумайте пароль" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Повторите пароль</label>
+                            <input type="password" id="regPasswordRepeat" placeholder="Повторите пароль" required>
+                        </div>
+                        <div style="display:flex;gap:8px;">
+                            <button type="submit" class="btn btn-primary" style="flex:1;">Зарегистрироваться</button>
+                            <button type="button" class="btn btn-secondary" onclick="hideStudentRegister()" style="flex:1;">Назад</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Librarian / Admin Tab -->
+                <div class="login-tab-content" id="librarianLogin">
+                    <form onsubmit="adminLogin(event)">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="loginEmail" value="admin@school.ru" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="password" id="loginPassword" value="admin123" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full btn-lg">Войти как библиотекарь</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Catalog Page -->
+    <div class="page" id="catalogPage">
+        <header class="header-catalog">
+            <div class="nav-bar">
+                <div class="nav-left">
+                    <a class="nav-brand" href="#">
+                        <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="8" fill="#6366F1"/>
+                            <path d="M20 8L32 14V26L20 32L8 26V14L20 8Z" fill="white" fill-opacity="0.9"/>
+                            <path d="M20 12L28 16V24L20 28L12 24V16L20 12Z" fill="#6366F1"/>
+                        </svg>
+                        <h1>Библиотека</h1>
+                    </a>
+                    <div class="nav-menu">
+                        <button class="nav-item active" onclick="goToCatalog()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                            <span>Каталог</span>
+                        </button>
+                        <button class="nav-item" onclick="switchToAdmin()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            <span>Админка</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">
+                        <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                        </svg>
+                        <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                        </svg>
+                    </button>
+                    <span class="nav-user" id="userBadge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span id="userNameDisplay"></span>
+                    </span>
+                    <button class="btn btn-outline btn-sm" onclick="logoutToLogin()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        Выйти
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <section class="filters-section">
+                <div class="filters-header">
+                    <h2>Каталог книг</h2>
+                    <div class="search-box">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input type="text" id="searchInput" placeholder="Поиск по названию или автору..." oninput="debounceSearch()">
+                    </div>
+                </div>
+                <div class="filters-grid" id="filtersGrid">
+                    <div class="filter-group">
+                        <label>Автор</label>
+                        <select id="filterAuthor" onchange="applyFilters()">
+                            <option value="">Все авторы</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Класс</label>
+                        <select id="filterGrade" onchange="applyFilters()">
+                            <option value="">Все классы</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Цель</label>
+                        <select id="filterPurpose" onchange="applyFilters()">
+                            <option value="">Все цели</option>
+                        </select>
+                    </div>
+                    <div class="filter-group filter-actions">
+                        <button class="btn btn-secondary" onclick="resetFilters()">Сбросить</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="books-section">
+                <div class="books-grid" id="booksGrid">
+                    <div class="loading">Загрузка книг...</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Admin Page -->
+    <div class="page" id="adminPage">
+        <header class="header-admin">
+            <div class="nav-bar">
+                <div class="nav-left">
+                    <a class="nav-brand" href="#">
+                        <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="8" fill="#8B5CF6"/>
+                            <path d="M20 8L32 14V26L20 32L8 26V14L20 8Z" fill="white" fill-opacity="0.9"/>
+                            <path d="M20 12L28 16V24L20 28L12 24V16L20 12Z" fill="#8B5CF6"/>
+                        </svg>
+                        <h1>Панель управления</h1>
+                    </a>
+                    <div class="nav-menu">
+                        <button class="nav-item" onclick="goToCatalog()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                            <span>Каталог</span>
+                        </button>
+                        <button class="nav-item active" onclick="switchToAdmin()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            <span>Админка</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">
+                        <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                        </svg>
+                        <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                        </svg>
+                    </button>
+                    <span class="nav-user">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Администратор
+                    </span>
+                    <button class="btn btn-danger btn-sm" onclick="adminLogout()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        Выйти
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <!-- Stats Cards -->
+            <div class="stats-grid" id="adminStatsGrid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">📚</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statTotalBooks">0</span>
+                        <span class="stat-label">Всего книг</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon amber">📖</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statActiveLoans">0</span>
+                        <span class="stat-label">Активных бронирований</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon emerald">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statReturnedToday">0</span>
+                        <span class="stat-label">Возвращено сегодня</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-action" onclick="loadAdminStats()">
+                    <div class="stat-icon purple">🔄</div>
+                    <div class="stat-info">
+                        <span class="stat-value">Обновить</span>
+                        <span class="stat-label">Статистику</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Navigation Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="switchAdminTab('books', this)">
+                    <span>📋</span> Управление книгами
+                </button>
+                <button class="admin-tab" onclick="switchAdminTab('loans', this)">
+                    <span>📑</span> Бронирования
+                </button>
+                <button class="admin-tab" onclick="switchAdminTab('popular', this)">
+                    <span>⭐</span> Популярные
+                </button>
+            </div>
+
+            <!-- Books Management -->
+            <div id="adminTabBooks" class="admin-tab-content active">
+                <div class="admin-section-header">
+                    <h3>Книги в библиотеке</h3>
+                    <button class="btn btn-primary" onclick="showAddBookForm()">+ Добавить книгу</button>
+                </div>
+
+                <div class="admin-form-panel" id="bookFormPanel" style="display:none;">
+                    <div class="admin-form-header">
+                        <h4 id="bookFormTitle">Добавить книгу</h4>
+                        <button class="btn-close" onclick="cancelBookForm()">&times;</button>
+                    </div>
+                    <form id="bookForm" onsubmit="saveBook(event)">
+                        <input type="hidden" id="editBookId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Название *</label>
+                                <input type="text" id="fTitle" required placeholder="Введите название книги">
+                            </div>
+                            <div class="form-group">
+                                <label>Автор *</label>
+                                <input type="text" id="fAuthor" required placeholder="ФИО автора">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Год издания</label>
+                                <input type="number" id="fYear" placeholder="2024">
+                            </div>
+                            <div class="form-group">
+                                <label>Класс</label>
+                                <input type="text" id="fGrade" placeholder="напр. 5-11">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Цель</label>
+                                <select id="fPurpose">
+                                    <option value="учебник">Учебник</option>
+                                    <option value="внеклассное чтение">Внеклассное чтение</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Количество экземпляров *</label>
+                                <input type="number" id="fTotalCopies" min="1" value="1" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>URL обложки</label>
+                            <input type="url" id="fCoverUrl" placeholder="https://...">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">💾 Сохранить</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelBookForm()">Отмена</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-search">
+                        <input type="text" id="adminBookSearch" placeholder="🔍 Поиск по книгам..." oninput="filterAdminBooks()">
+                        <span class="table-count" id="adminBooksCount">0 книг</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Обложка</th>
+                                    <th>Название</th>
+                                    <th>Автор</th>
+                                    <th>Класс</th>
+                                    <th>Экз.</th>
+                                    <th>Доступно</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminBooksBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loans Management -->
+            <div id="adminTabLoans" class="admin-tab-content">
+                <div class="admin-section-header">
+                    <h3>Бронирования</h3>
+                    <div class="loan-filters">
+                        <select id="loanFilter" onchange="loadAdminLoans()">
+                            <option value="">Все</option>
+                            <option value="active">Активные</option>
+                            <option value="returned">Возвращённые</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <div class="table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Книга</th>
+                                    <th>Кто взял</th>
+                                    <th>Цель</th>
+                                    <th>Кол-во</th>
+                                    <th>Дата выдачи</th>
+                                    <th>Статус</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminLoansBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Books -->
+            <div id="adminTabPopular" class="admin-tab-content">
+                <div class="admin-section-header">
+                    <h3>⭐ Топ-10 популярных книг за сегодня</h3>
+                </div>
+                <div class="top-books-card">
+                    <div id="topBooksList" class="top-books-list"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Book Detail Modal -->
+    <div class="modal-overlay" id="detailModal" onclick="if(event.target===this)closeDetailModal()">
+        <div class="modal modal-detail" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="detailTitle"></h3>
+                <button class="modal-close" onclick="closeDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="book-preview" id="detailPreview">
+                    <div id="detailCoverPlaceholder" class="book-cover-placeholder" style="font-size:64px;width:120px;height:180px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:linear-gradient(135deg,#667eea,#764ba2);flex-shrink:0;">📖</div>
+                    <div style="flex:1">
+                        <h4 id="detailAuthor" style="color:var(--gray-400);font-weight:400;margin-bottom:4px;"></h4>
+                        <div class="book-meta" id="detailMeta" style="margin:8px 0;">
+                            <span class="book-tag primary" id="detailGrade"></span>
+                            <span class="book-tag" id="detailPurpose"></span>
+                        </div>
+                        <p id="detailYear" style="color:var(--gray-500);font-size:14px;"></p>
+                        <p id="detailAvailable" style="margin-top:8px;font-weight:600;"></p>
+                    </div>
+                </div>
+                <div id="detailDescription" class="detail-description"></div>
+                <button class="btn btn-primary btn-full btn-lg" id="detailBookingBtn" onclick="openBookingModalFromDetail()" style="margin-top:16px;">Забронировать</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal-overlay" id="bookingModal" onclick="if(event.target===this)closeModal()">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Бронирование книги</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="book-preview" id="bookPreview">
+                    <img id="modalCover" src="" alt="Обложка" onerror="this.style.display='none'">
+                    <div>
+                        <h4 id="modalTitle"></h4>
+                        <p id="modalAuthor"></p>
+                        <p class="available-info" id="modalAvailable"></p>
+                    </div>
+                </div>
+                <form id="bookingForm" onsubmit="submitBooking(event)">
+                    <input type="hidden" id="bookId">
+                    <div class="form-group">
+                        <label>Кто берёт</label>
+                        <input type="text" id="borrowerName" required placeholder="ФИО ученика или учителя" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Для чего</label>
+                        <select id="purposeSelect" onchange="toggleCustomPurpose()">
+                            <option value="урок">Урок</option>
+                            <option value="внеклассное чтение">Внеклассное чтение</option>
+                            <option value="подготовка к экзамену">Подготовка к экзамену</option>
+                            <option value="проектная работа">Проектная работа</option>
+                            <option value="other">Другое...</option>
+                        </select>
+                        <input type="text" id="customPurpose" style="display:none; margin-top:8px;" placeholder="Укажите цель">
+                    </div>
+                    <div class="form-group">
+                        <label>Количество</label>
+                        <input type="number" id="quantity" min="1" value="1" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full btn-lg">Забронировать</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script src="/static/app.js?v=3"></script>
+</body>
+</html>
